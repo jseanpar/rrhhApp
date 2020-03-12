@@ -27,10 +27,7 @@ renderRightPanelPermissionLicense = ( props ) => {
                 <Badge style = { { backgroundColor: '#4caf50' , justifyContent: 'center', alignItems: 'center', width: 80, height: 20 } } >
                     <Text style = { { fontSize: 8 } } >{ props.DESC_DOM_ESTADO_LICENCIA } </Text>
                 </Badge>
-                <Badge style = { { backgroundColor: '#fff' , justifyContent: 'center', alignItems: 'center', width: 80, height: 20 } } >
-                  <Icon name="md-document" style = { { fontSize: 30, color: '#808080', marginTop: 30 } } />
-                </Badge> 
-            </Right>   
+            </Right>     
         )
     } 
     else {

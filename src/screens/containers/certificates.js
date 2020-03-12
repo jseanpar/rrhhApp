@@ -1,59 +1,64 @@
 import React, { Component } from 'react'
-import { SafeAreaView, View, StyleSheet, TouchableOpacity, Dimensions } from 'react-native'
+import { SafeAreaView, View, StyleSheet,BackHandler, TouchableOpacity, Dimensions } from 'react-native'
 import { connect } from 'react-redux';
 import { Container, Content, Icon, Subtitle } from 'native-base'
 
 
 import API from '../../../utils/api'
-import Header from '../../sections/containers/header';
+import Header  from '../../sections/containers/header';
+import HeaderBackButton from '../../sections/components/header-back-button'
 
-class Dashboard extends Component {  
+class Certificates extends Component {  
 
     viewModule = ( screen ) => { this.props.navigation.navigate ( screen ) }
 
+    constructor ( props ) {
+        super ( props )
+        this.handleBackButtonClick = this.handleBackButtonClick.bind ( this )
+    }
+
     static navigationOptions = () => { return { header: null } }    
+
+    componentDidMount () {
+        BackHandler.addEventListener ( 'hardwareBackPress', this.handleBackButtonClick )
+    }
+
+    componentWillUnmount () {
+        BackHandler.removeEventListener ( 'hardwareBackPress', this.handleBackButtonClick ) 
+    }
+    
+    handleBackButtonClick () {
+        this.props.navigation.goBack ( null )
+        return true
+    }
 
     render() {
         return (
             <SafeAreaView style = { { flex:1 } } >
                 <Container>
-                    <Header title = 'Inicio' navigation = { this.props.navigation } /> 
+                <Header navigation = { this.props.navigation } title = 'Certificados' >
+                        <HeaderBackButton onPress = { () => { this.props.navigation.goBack() } } />
+                    </Header>
                     <Content padder>
                         <View style = { styles.containerFirst } >
-                            <TouchableOpacity  style = { styles.btn_notas } onPress = { () => { this.viewModule ( 'EmployeList' ) } } >
-                                <Icon name="md-bookmarks" style = { { fontSize: 40, color: '#fff' } } />
-                                <Subtitle>Antecedentes Personales</Subtitle>
-                            </TouchableOpacity > 
-                            <TouchableOpacity style = { styles.btn_asistencia } onPress = { () => { this.viewModule ( 'PermissionList' ) } } >
-                                <Icon name="md-calendar" style = { { fontSize: 40, color: '#fff' } } />
-                                <Subtitle>Permisos</Subtitle>
-                            </TouchableOpacity>
-                        </View>
-                        <View style = { styles.container } >
-                            <TouchableOpacity style = { styles.btn_anotaciones } onPress = { () => { this.viewModule ( 'HolidayList' ) } } >
-                                <Icon name="ios-list-box" style = { { fontSize: 40, color: '#fff' } } />
-                                <Subtitle>Vacaciones</Subtitle>
-                            </TouchableOpacity>
-                            <TouchableOpacity style = { styles.btn_alum_curso } onPress = { () => { this.viewModule ( 'SettlementList' ) } } >
-                                <Icon name="md-archive" style = { { fontSize: 40, color: '#fff' } } />
-                                <Subtitle>Liquidaciones</Subtitle>
-                            </TouchableOpacity>
-                        </View>
-                        <View style = { styles.container } >
-                            <TouchableOpacity  style = { styles.btn_nursing } onPress = { () => { this.viewModule ( 'FamilyList' ) } } >
-                                <Icon name="ios-people" style = { { fontSize: 40, color: '#fff' } } />
-                                <Subtitle>Familia</Subtitle>
-                            </TouchableOpacity >
-                            <TouchableOpacity style = { styles.btn_documents } onPress = { () => { this.viewModule ( 'Certificates' ) } } >
+                            <TouchableOpacity  style = { styles.btn_anotaciones } onPress = { () => { this.viewModule ( 'HolidayPdf' ) } } >
                                 <Icon name="md-document" style = { { fontSize: 40, color: '#fff' } } />
-                                <Subtitle>Certificados</Subtitle>
+                                <Subtitle>Vacaciones</Subtitle> 
+                            </TouchableOpacity > 
+                            <TouchableOpacity style = { styles.btn_anotaciones } onPress = { () => { this.viewModule ( 'AntiquePdf' ) } } >
+                                <Icon name="md-document" style = { { fontSize: 40, color: '#fff' } } />
+                                <Subtitle>Antiguedad</Subtitle>
                             </TouchableOpacity>
                         </View>
                         <View style = { styles.container } >
-                            <TouchableOpacity  style = { styles.btn_anotaciones } onPress = { () => { this.viewModule ( 'LicenseList' ) } } >
-                                <Icon name="md-medkit" style = { { fontSize: 40, color: '#fff' } } />
-                                <Subtitle>Licencias</Subtitle>
-                            </TouchableOpacity >
+                            <TouchableOpacity style = { styles.btn_anotaciones } onPress = { () => { this.viewModule ( 'ForeignPdf' ) } } >
+                                <Icon name="md-document" style = { { fontSize: 40, color: '#fff' } } />
+                                <Subtitle>Extranjero</Subtitle>
+                            </TouchableOpacity>
+                            <TouchableOpacity style = { styles.btn_alum_curso } onPress = { () => { this.viewModule ( 'InternshipPdf' ) } } >
+                                <Icon name="md-document" style = { { fontSize: 40, color: '#fff' } } />
+                                <Subtitle>Pasantia</Subtitle>
+                            </TouchableOpacity>
                         </View>
                     </Content>
                 </Container>
@@ -150,4 +155,4 @@ const styles = StyleSheet.create ( {
 
 function mapStateToProps ( state ) { return {auth: state.authReducer } }
 
-export default connect ( mapStateToProps ) ( Dashboard )
+export default connect ( mapStateToProps ) ( Certificates )

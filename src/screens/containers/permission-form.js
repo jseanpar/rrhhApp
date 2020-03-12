@@ -9,19 +9,19 @@ import API from '../../../utils/api';
 class PermissionForm extends Component {
 
     state = {
-        loading: false,
+        loading: true,
         FechaIni: undefined,
         FechaFin: undefined,
         TipoPerm: undefined,
         Dias: undefined,
         Obs: undefined,
-        selected2: undefined,
+        selected2: undefined, 
     }
 
     constructor(props) {
         super(props);
         this.state = {
-            chosenDate: new Date(), chosenDateFin: new Date(),
+            chosenDate: new Date(), chosenDateFin: new Date(), loading: true,
         };
 
         this.setDate = this.setDate.bind(this);
@@ -77,6 +77,7 @@ class PermissionForm extends Component {
                 var tipo_contrato = response[0].CONT_DOM_TIPO_CONTRATO
                 API.getTypePermissionData(this.props.auth, sector, tipo_ley, tipo_contrato).then((typepermission) => {
                     this.props.dispatch({ type: 'SET_TYPE_PERMISSION_LIST', payload: { typepermission } })
+                    this.setState({ loading: false })
                 })
             }
         })
@@ -86,8 +87,6 @@ class PermissionForm extends Component {
 
         var fini = this.fechaFormat(this.state.chosenDate);
         var ffin = this.fechaFormat(this.state.chosenDateFin);
-
-        this.setState({ loading: true })
 
         if ((typeof this.state.tipopermiso === 'undefined') || (this.state.tipopermiso === '') || (typeof this.state.Dias === 'undefined') || (this.state.Dias === '')) {
             this.setState({ loading: false })
@@ -109,13 +108,17 @@ class PermissionForm extends Component {
     static navigationOptions = () => { return { header: null } }
 
     render() {
-        console.log(this.props)
+        console.log(this.state.loading)
         return (
-            <SafeAreaView style={styles.container} >
-                <StatusBar barStyle="light-content" backgroundColor="#0A74BC" />
+           <SafeAreaView style={styles.container} >
+                 <StatusBar barStyle="light-content" backgroundColor="#0A74BC" />
                 <Header navigation={this.props.navigation} title='Agregar Permiso' >
                     <HeaderBackButton onPress={() => { this.props.navigation.goBack() }} />
                 </Header>
+                { this.state.loading ? 
+                            <ActivityIndicator color = "#0098D0" size = "large" style = { { flex: 1, justifyContent: 'center', alignItems: 'center', height: 200 } } />
+                        : 
+                            (
                 <View style={styles.formContainer} >
                     <View style={styles.logoContainer} >
                         <Text style={styles.title} >RRHH App</Text>
@@ -186,13 +189,13 @@ class PermissionForm extends Component {
                                 onValueChange={(itemValue, itemIndex) => this.pickerChange(itemValue)}>
                                 <Picker.Item label="Seleccione Permiso" value="" />
                                 {
-                                    this.props.employe.typepermission.map((v) => {
+                                    this.props.typepermission.map((v) => {
                                         return <Picker.Item label={v.GLS_TIPO_PERMISO} value={v.TIPO_PERMISO} key={v.TIPO_PERMISO} />
                                     })
                                 }
-                            </Picker>
+                            </Picker> 
                         </View>
-                    </View>
+                            </View>
                     <View style={styles.inputWrapper} >
                         <TextInput onChangeText={(text) => { this.setState({ Dias: text }) }} style={styles.input} placeholder="Cantidad de Días" placeholderTextColor="black" keyboardType='number-pad' />
                     </View>
@@ -204,8 +207,10 @@ class PermissionForm extends Component {
                             {this.state.loading ? <View style={styles.loading} ><ActivityIndicator color="white" /></View> : <Text>Ingresar Permiso</Text>}
                         </Text>
                     </TouchableOpacity>
-                </View>
-            </SafeAreaView>
+                 </View> 
+                 ) 
+                }  
+                </SafeAreaView> 
         )
     }
 }
@@ -303,6 +308,6 @@ const styles = StyleSheet.create({
     }
 })
 
-function mapStateToProps(state) { return { auth: state.authReducer, employe: state.employeReducer } }
+function mapStateToProps(state) { return { auth: state.authReducer, typepermission: state.employeReducer.typepermission } }
 
 export default connect(mapStateToProps)(PermissionForm) 

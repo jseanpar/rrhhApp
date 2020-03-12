@@ -152,6 +152,7 @@ class Api {
         return result
     }
 
+
     //Get holiday data by employe
     async getHolidayData(p_auth) {
 
@@ -172,25 +173,125 @@ class Api {
         return result
     }
 
-        //Get Holidays Days
-        async getHolidayDays(p_auth) {
+    //Get PDF of settlemen
+    async getSettlementPdf(p_auth, periodo) {
 
-            const AUTHORIZATION = `${p_auth.auth.token_type} ${p_auth.auth.access_token}`
-            const PATH = `empleado/${p_auth.auth['x-user-name']}`
-    
-            const result = await fetch(`${BASE_API_URL}${PATH}/vacaciones/dias/${p_auth.auth.usuaSector}`, {
-                method: 'GET',
-                headers: {
-                    Authorization: AUTHORIZATION,
-                    'Content-Type': CONTENT_TYPE,
-                    'x-user-name': p_auth.auth['x-user-name']
-                },
-            })
-                .then(async (query) => await query.json())
-                .catch(error => console.log('error', error))
-    
-            return result
-        }
+        const AUTHORIZATION = `${p_auth.auth.token_type} ${p_auth.auth.access_token}`
+        const PATH = `empleado/${p_auth.auth['x-user-name']}`
+
+        const result = await fetch(`${BASE_API_URL}${PATH}/liquidacion/descargar/${periodo}`, {
+            method: 'GET',
+            headers: {
+                Authorization: AUTHORIZATION,
+                'Content-Type': CONTENT_TYPE,
+                'x-user-name': p_auth.auth['x-user-name']
+            },
+        })
+            .then(async (query) => await query.json())
+            .catch(error => console.log('error', error))
+
+        return result
+    }
+
+    //Get PDF of holiday
+    async getHolidayPdf(p_auth) {
+
+        const AUTHORIZATION = `${p_auth.auth.token_type} ${p_auth.auth.access_token}`
+        const PATH = `empleado/${p_auth.auth['x-user-name']}`
+
+        const result = await fetch(`${BASE_API_URL}${PATH}/certificado/vacacion`, {
+            method: 'GET',
+            headers: {
+                Authorization: AUTHORIZATION,
+                'Content-Type': CONTENT_TYPE,
+                'x-user-name': p_auth.auth['x-user-name']
+            },
+        })
+            .then(async (query) => await query.json())
+            .catch(error => console.log('error', error))
+
+        return result
+    }
+
+    //Get PDF of antique
+    async getAntiquePdf(p_auth) {
+
+        const AUTHORIZATION = `${p_auth.auth.token_type} ${p_auth.auth.access_token}`
+        const PATH = `empleado/${p_auth.auth['x-user-name']}`
+
+        const result = await fetch(`${BASE_API_URL}${PATH}/certificado/antiguedad/antiguedad/0`, {
+            method: 'GET',
+            headers: {
+                Authorization: AUTHORIZATION,
+                'Content-Type': CONTENT_TYPE,
+                'x-user-name': p_auth.auth['x-user-name']
+            },
+        })
+            .then(async (query) => await query.json())
+            .catch(error => console.log('error', error))
+
+        return result
+    }
+
+    //Get PDF of foreign
+    async getForeignPdf(p_auth) {
+
+        const AUTHORIZATION = `${p_auth.auth.token_type} ${p_auth.auth.access_token}`
+        const PATH = `empleado/${p_auth.auth['x-user-name']}`
+
+        const result = await fetch(`${BASE_API_URL}${PATH}/certificado/antiguedad/extranjero/0`, {
+            method: 'GET',
+            headers: {
+                Authorization: AUTHORIZATION,
+                'Content-Type': CONTENT_TYPE,
+                'x-user-name': p_auth.auth['x-user-name']
+            },
+        })
+            .then(async (query) => await query.json())
+            .catch(error => console.log('error', error))
+
+        return result
+    }
+
+    //Get PDF of internship
+    async getInternshipPdf(p_auth) {
+
+        const AUTHORIZATION = `${p_auth.auth.token_type} ${p_auth.auth.access_token}`
+        const PATH = `empleado/${p_auth.auth['x-user-name']}`
+
+        const result = await fetch(`${BASE_API_URL}${PATH}/certificado/antiguedad/pasantia/0`, {
+            method: 'GET',
+            headers: {
+                Authorization: AUTHORIZATION,
+                'Content-Type': CONTENT_TYPE,
+                'x-user-name': p_auth.auth['x-user-name']
+            },
+        })
+            .then(async (query) => await query.json())
+            .catch(error => console.log('error', error))
+
+        return result
+    }
+
+    //Get Holidays Days
+    async getHolidayDays(p_auth) {
+
+        const AUTHORIZATION = `${p_auth.auth.token_type} ${p_auth.auth.access_token}`
+        const PATH = `empleado/${p_auth.auth['x-user-name']}`
+
+        const result = await fetch(`${BASE_API_URL}${PATH}/vacaciones/dias/${p_auth.auth.usuaSector}`, {
+            method: 'GET',
+            headers: {
+                Authorization: AUTHORIZATION,
+                'Content-Type': CONTENT_TYPE,
+                'x-user-name': p_auth.auth['x-user-name']
+            },
+        })
+            .then(async (query) => await query.json())
+            .catch(error => console.log('error', error))
+
+        return result
+    }
 
     //Post holiday 
     async postHolidayData(p_auth, data, fini, ffin, contrato, dias_dispo) {
@@ -204,10 +305,10 @@ class Api {
             'contrato': contrato,
             'cantidad_dias': data.Dias,
             'observacion': data.Obs,
-            'dias_disp_h' : dias_dispo,
+            'dias_disp_h': dias_dispo,
             'usuario_sol': p_auth.auth['dev-user-name']
-        } 
-        var formBody = [] 
+        }
+        var formBody = []
         for (var property in paramspost) {
             var encodedKey = encodeURIComponent(property)
             var encodedValue = encodeURIComponent(paramspost[property])
@@ -308,6 +409,82 @@ class Api {
 
         return result
     }
+
+    //Get Holiday Receipt by employe
+    async getHolidayReceipt(p_auth, id_holiday) {
+
+        const AUTHORIZATION = `${p_auth.auth.token_type} ${p_auth.auth.access_token}`
+        const PATH = `empleado/${p_auth.auth['x-user-name']}`
+
+        const result = await fetch(`${BASE_API_URL}${PATH}/vacaciones/${id_holiday}/comprobante`, {
+            method: 'GET',
+            headers: {
+                Authorization: AUTHORIZATION,
+                'Content-Type': CONTENT_TYPE,
+                'x-user-name': p_auth.auth['x-user-name']
+            },
+        })
+            .then(async (query) => await query.json())
+            .catch(error => console.log('error', error))
+
+        return result
+    }
+
+    //Get Permission Receipt by employe
+    async getPermissionReceipt(p_auth, id_permission) {
+
+        const AUTHORIZATION = `${p_auth.auth.token_type} ${p_auth.auth.access_token}`
+        const PATH = `empleado/${p_auth.auth['x-user-name']}`
+
+        const result = await fetch(`${BASE_API_URL}${PATH}/permiso/1081/comprobante`, {
+            method: 'GET',
+            headers: {
+                Authorization: AUTHORIZATION,
+                'Content-Type': CONTENT_TYPE,
+                'x-user-name': p_auth.auth['x-user-name']
+            },
+        })
+            .then(async (query) => await query.json())
+            .catch(error => console.log('error', error))
+
+        return result
+    }
+
+    //Post Change Password 
+    async postChangePassword(p_auth,passOld,passNew) {
+
+        const AUTHORIZATION = `${p_auth.auth.token_type} ${p_auth.auth.access_token}`
+        const PATH = `empleado/${p_auth.auth['x-user-name']}`
+
+        paramspost = {
+            'old_password': passOld,
+            'new_password': passNew,
+            'user_login': p_auth.auth['dev-user-name'],
+            'client_key': '7474-R2HR-35DR-HAD7-5E9R-E966-63HR-B85H',
+        }
+        var formBody = []
+        for (var property in paramspost) {
+            var encodedKey = encodeURIComponent(property)
+            var encodedValue = encodeURIComponent(paramspost[property])
+            formBody.push(encodedKey + "=" + encodedValue)
+        }
+        var arrBody = formBody.join("&")
+
+        const result = await fetch(`${BASE_API_URL}${PATH}/clave`, {
+            method: 'POST',
+            headers: {
+                Authorization: AUTHORIZATION,
+                'Content-Type': CONTENT_TYPE,
+                'x-user-name': p_auth.auth['x-user-name'],
+            },
+            body: arrBody
+        })
+            .then(async (query) => await query.json())
+            .catch(error => console.log('error', error))
+
+        return result
+    }
+
 
 }
 

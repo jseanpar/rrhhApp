@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { SafeAreaView, BackHandler, FlatList, ActivityIndicator } from 'react-native';
 import { Container, Content, ListItem, Body, Text } from 'native-base';
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation'
 
 import API from '../../../utils/api'
 import Header from '../../sections/containers/header';
@@ -52,9 +53,15 @@ class SettlementList extends Component {
     keyExtractor = item => item.PERI_COD.toString()
     renderEmpty = () => <Empty text="No se encontraron registros" />
 
+    settlementPress = ( item ) => { 
+
+        this.props.dispatch ( { type: 'SET_SELECTED_SETTLEMENT', payload: { selectedSettlement: item } } )
+        this.props.dispatch ( NavigationActions.navigate ( { routeName: 'SettlementDetail' } ) )
+    }
+
     renderItem = ({ item }) => {
         return (
-            <Settlement {...item} />
+            <Settlement {...item} onPress = { () => { this.settlementPress ( item ) }} />
         )
     }
 
@@ -69,7 +76,7 @@ class SettlementList extends Component {
                         {this.state.loading ?
                             <ActivityIndicator color="#0098D0" size="large" style={{ flex: 1, justifyContent: 'center', alignItems: 'center', height: 200 }} />
                             : (
-                                <FlatList keyExtractor={this.keyExtractor} data={this.props.employe.settlementList} ListEmptyComponent={this.renderEmpty}
+                                <FlatList keyExtractor={this.keyExtractor} data={this.props.settlementList} ListEmptyComponent={this.renderEmpty}
                                     renderItem={this.renderItem} />)
                         }
                     </Content>
@@ -79,6 +86,6 @@ class SettlementList extends Component {
     }
 }
 
-function mapStateToProps(state) { return { auth: state.authReducer, employe: state.employeReducer } }
+function mapStateToProps(state) { return { auth: state.authReducer, settlementList: state.employeReducer.settlementList } }
 
 export default connect(mapStateToProps)(SettlementList)

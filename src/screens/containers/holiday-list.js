@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { SafeAreaView, BackHandler, FlatList, ActivityIndicator } from 'react-native';
 import { Container, Content, ListItem, Body, Text, Button } from 'native-base';
 import { connect } from 'react-redux'; 
-
+import { NavigationActions } from 'react-navigation'
 import API from '../../../utils/api'  
 import Header  from '../../sections/containers/header';
 import HeaderBackButton from '../../sections/components/header-back-button'
@@ -53,14 +53,27 @@ class HolidayList extends Component {
     keyExtractor = item => item.NUM_LIN.toString ()
     renderEmpty = () => <Empty text = "No se encontraron registros" />
 
+    holidayPress = ( item ) => { 
+        this.props.dispatch ( { type: 'SET_SELECTED_HOLIDAY', payload: { selectedHoliday: item } } )
+        this.props.dispatch ( NavigationActions.navigate ( { routeName: 'HolidayDetail' } ) )
+    }
+
     renderItem = ( { item } ) => {
+
+        if(item.DESC_DOM_ESTADO_PERMISO == 'AUTORIZADO'){
         return (
-            <Holiday { ...item } />  
+            <Holiday { ...item } onPress = {() => this.holidayPress( item )}/>  
         )
+        }else{
+            return (
+            <Holiday { ...item } />
+            )   
+        }
+
     }
     handleAddHoliday = () => {
         this.props.navigation.navigate('HolidayForm')     
-    }
+    }  
     
     render() {
         return (

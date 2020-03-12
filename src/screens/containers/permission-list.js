@@ -2,16 +2,17 @@ import React, { Component } from 'react';
 import { SafeAreaView, BackHandler, FlatList, ActivityIndicator } from 'react-native';
 import { Container, Content, ListItem, Body, Text, Fab, Button, Icon } from 'native-base';
 import { connect } from 'react-redux';
-
-import API from '../../../utils/api'
+import { NavigationActions } from 'react-navigation'
+import API from '../../../utils/api' 
 import Header from '../../sections/containers/header';
 import HeaderBackButton from '../../sections/components/header-back-button'
 import Empty from '../../sections/components/empty'
 import Permission from '../../sections/containers/permission'
 
+
 class PermissionList extends Component {
 
-    state = { loading: true, active: false }
+    state = { loading: true, active: false } 
 
     constructor(props) {
         super(props)
@@ -54,9 +55,14 @@ class PermissionList extends Component {
     keyExtractor = item => item.NUM_LIN.toString()
     renderEmpty = () => <Empty text="No se encontraron registros" />
 
+    permissionPress = ( item ) => { 
+        this.props.dispatch ( { type: 'SET_SELECTED_PERMISSION', payload: { selectedPermission: item } } )
+        this.props.dispatch ( NavigationActions.navigate ( { routeName: 'PermissionDetail' } ) )
+    }
+
     renderItem = ({ item }) => {
         return (
-            <Permission {...item} />
+            <Permission {...item} onPress = {() => this.permissionPress( item )} />
         )
     }
 

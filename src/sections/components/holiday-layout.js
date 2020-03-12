@@ -1,5 +1,5 @@
 import React from 'react'
-import { List, ListItem, Left, Body, Right, Thumbnail, Text, Badge } from 'native-base'
+import { List, ListItem, Left, Body, Right, Thumbnail, Text, Badge, Icon} from 'native-base'
 
 renderRightPanel = ( props ) => {
     if ( props.DESC_DOM_ESTADO_PERMISO == 'PENDIENTE') {
@@ -16,6 +16,9 @@ renderRightPanel = ( props ) => {
             <Right style = { { position: 'absolute', right: 5, top: 30 } }>
                 <Badge style = { { backgroundColor: '#4caf50' , justifyContent: 'center', alignItems: 'center', width: 80, height: 20 } } >
                     <Text style = { { fontSize: 8 } } >{ props.DESC_DOM_ESTADO_PERMISO }</Text>
+                </Badge>
+                <Badge style = { { marginTop: 20, backgroundColor: '#ffffff' , justifyContent: 'center', alignItems: 'center', width: 80, height: 20 } } >
+                    <Icon name="md-document" style = { { fontSize: 40, color: '#ccc' } } />
                 </Badge>
             </Right>
         )
@@ -35,13 +38,6 @@ function Holiday ( props ) {
     return (
         <List>
             <ListItem thumbnail onPress = { props.onPress } >
-                { /*<Left>
-                    { props.studentImage ? 
-                        <Thumbnail source = { { uri: `data:image/png;base64,${ props.studentImage }`} } />
-                    :
-                        <Thumbnail resizeMethod="resize" source = { require ( '../../../assets/user.png' ) } />
-                    }
-                </Left> */}  
                 <Body> 
                 <Text style = { { fontSize: 12 , fontWeight : 'bold'} } >Tipo Permiso:{props.DESC_DOM_TIPO_PERMISO} </Text>
                 <Text style = { { fontSize: 12 } } >Cantidad Dias: { props.PEVA_DIAS_ASIG }</Text>
