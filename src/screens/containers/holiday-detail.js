@@ -7,6 +7,7 @@ import Pdf from 'react-native-pdf'
 import API from '../../../utils/api'
 import Header from '../../sections/containers/header';
 import HeaderBackButton from '../../sections/components/header-back-button'
+import SendMail from '../../sections/containers/send-mail';
 
 class HolidayDetail extends Component {
 
@@ -51,6 +52,7 @@ class HolidayDetail extends Component {
                             <ActivityIndicator color="#0098D0" size="large" style={{ flex: 1, justifyContent: 'center', alignItems: 'center', height: 200 }} />
                             : (
                         <View> 
+                        <SendMail document={this.props.holiday.base64} title='Solicitud documento de Vacaciones' nameDoc = {this.props.holiday.nombre}/>
                         <ListItem>
                             <Body style={{ justifyContent: 'center', alignItems: 'center' }} >
                                 <View>

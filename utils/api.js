@@ -451,7 +451,7 @@ class Api {
     }
 
     //Post Change Password 
-    async postChangePassword(p_auth,passOld,passNew) {
+    async postChangePassword(p_auth, passOld, passNew) {
 
         const AUTHORIZATION = `${p_auth.auth.token_type} ${p_auth.auth.access_token}`
         const PATH = `empleado/${p_auth.auth['x-user-name']}`
@@ -471,6 +471,40 @@ class Api {
         var arrBody = formBody.join("&")
 
         const result = await fetch(`${BASE_API_URL}${PATH}/clave`, {
+            method: 'POST',
+            headers: {
+                Authorization: AUTHORIZATION,
+                'Content-Type': CONTENT_TYPE,
+                'x-user-name': p_auth.auth['x-user-name'],
+            },
+            body: arrBody
+        })
+            .then(async (query) => await query.json())
+            .catch(error => console.log('error', error))
+
+        return result
+    }
+
+    //POST permission data by employe
+    async postSendMail(p_auth, email, docto, titulo, contenido) {
+        const AUTHORIZATION = `${p_auth.auth.token_type} ${p_auth.auth.access_token}`
+        const PATH = `empleado/${p_auth.auth['x-user-name']}`
+
+        paramspost = {
+            'email': email,
+            'titulo': titulo,
+            'contenido': contenido,
+            'base64': docto,
+        }
+        var formBody = []
+        for (var property in paramspost) {
+            var encodedKey = encodeURIComponent(property)
+            var encodedValue = encodeURIComponent(paramspost[property])
+            formBody.push(encodedKey + "=" + encodedValue)
+        }
+        var arrBody = formBody.join("&")
+
+        const result = await fetch(`${BASE_API_URL}${PATH}/enviarcorreo`, {
             method: 'POST',
             headers: {
                 Authorization: AUTHORIZATION,

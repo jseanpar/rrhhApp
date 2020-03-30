@@ -88,17 +88,31 @@ class PermissionForm extends Component {
         var fini = this.fechaFormat(this.state.chosenDate);
         var ffin = this.fechaFormat(this.state.chosenDateFin);
 
-        if ((typeof this.state.tipopermiso === 'undefined') || (this.state.tipopermiso === '') || (typeof this.state.Dias === 'undefined') || (this.state.Dias === '')) {
-            this.setState({ loading: false })
-            this.showMessage('Atención', 'Debe llenar todos los campos.')
-        } else {
-            API.getContractData(this.props.auth).then((response) => {
-                var contrato = response[0].CONT_SEC
-                API.postPermissionData(this.props.auth, this.state, fini, ffin, contrato).then((response) => {
-                    this.props.navigation.navigate('Dashboard')
-                })
-            })
-        }
+        let dayini = this.state.chosenDate.getDate();
+        let dayfin = this.state.chosenDateFin.getDate();
+
+        diasSol = dayfin - dayini;
+
+        if(fini > ffin){
+            this.showMessage('Atención', 'La fecha de inicio no puede ser mayor a la fecha fin.')
+        }else{
+            if ((typeof this.state.tipopermiso === 'undefined') || (this.state.tipopermiso === '') || (typeof this.state.Dias === 'undefined') || (this.state.Dias === '')) {
+                this.setState({ loading: false })
+                this.showMessage('Atención', 'Debe llenar todos los campos.')
+            } else {
+                if(diasSol != this.state.Dias) {
+                    this.showMessage('Atención', 'La cantidad de dias no es igual a la seleccion del rango de fecha.')
+                }else{
+                    this.setState({ loading: true })
+                    API.getContractData(this.props.auth).then((response) => {
+                        var contrato = response[0].CONT_SEC
+                        API.postPermissionData(this.props.auth, this.state, fini, ffin, contrato).then((response) => {
+                            this.props.navigation.navigate('Dashboard')
+                        })
+                    })
+                }
+            } 
+        }   
     }
 
     showMessage = (p_title, p_message) => {

@@ -7,6 +7,7 @@ import Pdf from 'react-native-pdf'
 import API from '../../../utils/api'
 import Header  from '../../sections/containers/header';
 import HeaderBackButton from '../../sections/components/header-back-button'
+import SendMail from '../../sections/containers/send-mail';
 
 class ForeignPdf extends Component {
 
@@ -61,6 +62,7 @@ class ForeignPdf extends Component {
                             <ActivityIndicator color="#0098D0" size="large" style={{ flex: 1, justifyContent: 'center', alignItems: 'center', height: 200 }} />
                             : (
                         <View>
+                        <SendMail document={this.props.foreignPdf.base64} title='Solicitud documento certificado extranjero' nameDoc = {this.props.foreignPdf.nombre}/>
                         <ListItem> 
                             <Body style = { { justifyContent: 'center', alignItems: 'center' } } >
                                 <Text style = { { fontSize: 12 } }>{this.props.foreignPdf.nombre }</Text>

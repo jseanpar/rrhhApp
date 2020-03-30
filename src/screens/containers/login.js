@@ -10,7 +10,7 @@ class Login extends Component {
     state = {
         loading: false,
         userName: undefined,
-        pasword: undefined,
+        password: undefined,
     }
 
     handleLogin = async () => {

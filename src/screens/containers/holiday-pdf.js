@@ -7,6 +7,7 @@ import Pdf from 'react-native-pdf'
 import API from '../../../utils/api'
 import Header from '../../sections/containers/header';
 import HeaderBackButton from '../../sections/components/header-back-button'
+import SendMail from '../../sections/containers/send-mail';
 
 class HolidayPdf extends Component {
 
@@ -52,14 +53,15 @@ class HolidayPdf extends Component {
         return (
             <SafeAreaView style={{ flex: 1 }} >
                 <Container>
-                    <Header navigation={this.props.navigation} title='Certificado Antiguedad' >
+                    <Header navigation={this.props.navigation} title='Certificado de Vacaciones' >
                         <HeaderBackButton onPress={() => { this.props.navigation.goBack() }} />
                     </Header>
-                    <Content padder>
+                    <Content padder> 
                         {this.state.loading ?
                             <ActivityIndicator color="#0098D0" size="large" style={{ flex: 1, justifyContent: 'center', alignItems: 'center', height: 200 }} />
                             : (
                                 <View>
+                                <SendMail document={this.props.holidayPdf.base64} title='Solicitud documento de vacaciones disponibles' nameDoc = {this.props.holidayPdf.nombre}/>
                                 <ListItem> 
                                     <Body style={{ justifyContent: 'center', alignItems: 'center' }} >
                                         <View>

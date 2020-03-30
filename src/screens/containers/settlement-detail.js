@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { SafeAreaView, BackHandler, StyleSheet, Dimensions, ActivityIndicator } from 'react-native';
+import { SafeAreaView, BackHandler, StyleSheet, Dimensions, ActivityIndicator, TouchableOpacity, TextInput } from 'react-native';
 import { Container, Content, ListItem, Body, Text, View } from 'native-base';
 import { connect } from 'react-redux';
 import Pdf from 'react-native-pdf'
@@ -7,10 +7,11 @@ import Pdf from 'react-native-pdf'
 import API from '../../../utils/api'
 import Header from '../../sections/containers/header';
 import HeaderBackButton from '../../sections/components/header-back-button'
+import SendMail from '../../sections/containers/send-mail';
 
 class SettlementDetail extends Component {
 
-    state = { loading: true }
+    state = { loading: true}
 
     constructor(props) {
         super(props)
@@ -49,24 +50,25 @@ class SettlementDetail extends Component {
                         <HeaderBackButton onPress={() => { this.props.navigation.goBack() }} />
                     </Header>
                     <Content padder>
-                    {this.state.loading ?
+                        {this.state.loading ?
                             <ActivityIndicator color="#0098D0" size="large" style={{ flex: 1, justifyContent: 'center', alignItems: 'center', height: 200 }} />
                             : (
-                        <View> 
-                        <ListItem>
-                            <Body style={{ justifyContent: 'center', alignItems: 'center' }} >
                                 <View>
-                                    <Text style={{ fontSize: 12 }}>{this.props.settlement.nombre}</Text>
+                                    <SendMail document={this.props.settlement.base64} title='Solicitud documento de Liquidación' nameDoc = {this.props.settlement.nombre}/>
+                                    <ListItem>
+                                        <Body style={{ justifyContent: 'center', alignItems: 'center' }} >
+                                            <View>
+                                                <Text style={{ fontSize: 12 }}>{this.props.settlement.nombre}</Text>
+                                            </View>
+                                        </Body>
+                                    </ListItem>
+                                    <Pdf source={{ uri: `data:application/pdf;base64,${this.props.settlement.base64}`, cache: true }} onLoadComplete={(numberOfPages, filePath) => { console.log(`number of pages: ${numberOfPages}`) }}
+                                        onPageChanged={(page, numberOfPages) => { console.log(`current page: ${page}`) }}
+                                        onError={(error) => { console.log(error) }}
+                                        onPressLink={(uri) => { console.log(`Link presse: ${uri}`) }}
+                                        style={styles.pdf} />
                                 </View>
-                            </Body>
-                        </ListItem>
-                        <Pdf source={{ uri: `data:application/pdf;base64,${this.props.settlement.base64}`, cache: true }} onLoadComplete={(numberOfPages, filePath) => { console.log(`number of pages: ${numberOfPages}`) }}
-                            onPageChanged={(page, numberOfPages) => { console.log(`current page: ${page}`) }}
-                            onError={(error) => { console.log(error) }}
-                            onPressLink={(uri) => { console.log(`Link presse: ${uri}`) }}
-                            style={styles.pdf} />
-                        </View>
-                        )
+                            )
                         }
                     </Content>
                 </Container>
