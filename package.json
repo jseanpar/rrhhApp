@@ -13,7 +13,7 @@
     "native-base": "^2.13.8",
     "react": "16.8.6",
     "react-content-loader": "^4.3.3",
-    "react-native": "0.60.5",
+    "react-native": "0.62.3",
     "react-native-calendars": "^1.217.0",
     "react-native-dashboard": "0.0.4",
     "react-native-elements": "^1.2.5",
